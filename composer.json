@@ -3,7 +3,7 @@
     "type": "library",
     "description": "A simple markdown implementation for Silex and Twig",
     "keywords": ["silex","markdown"],
-    "homepage": "https://github.com/MadCatme/mongoappkit",
+    "homepage": "https://github.com/MadCatme/SilexMarkdown",
     "authors": [
         {
             "name": "David Henning",
