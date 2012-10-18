@@ -8,7 +8,7 @@ use Silex\Application,
 use SilexMarkdown\MarkdownExtraParser,
     SilexMarkdown\Twig\Extension\Markdown;
 
-class SilexServiceProvider implements ServiceProviderInterface {
+class SilexMarkdownServiceProvider implements ServiceProviderInterface {
 
     public function register(Application $app) {
         $app['markdown'] = $app->share(function () use ($app) {
