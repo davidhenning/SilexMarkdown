@@ -1,0 +1,26 @@
+{
+    "name": "silexmarkdown/silexmarkdown",
+    "type": "library",
+    "description": "A simple markdown implementation for Silex and Twig",
+    "keywords": ["silex","markdown"],
+    "homepage": "https://github.com/MadCatme/mongoappkit",
+    "authors": [
+        {
+            "name": "David Henning",
+            "email": "madcat.me@gmail.com",
+            "homepage": "http://webcodr.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "silex/silex": "1.*",
+        "twig/twig": "1.9.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "SilexMarkdown": "src"
+        }
+    },
+    "minimum-stability": "dev"
+}
