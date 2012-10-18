@@ -17,6 +17,10 @@
         "silex/silex": "1.*",
         "twig/twig": "1.9.*"
     },
+    "require-dev": {
+        "symfony/browser-kit": "2.1.*",
+        "symfony/css-selector": "2.1.*"
+    },
     "autoload": {
         "psr-0": {
             "SilexMarkdown": "src"

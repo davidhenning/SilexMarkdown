@@ -19,8 +19,8 @@ class Markdown extends Twig_Extension {
         );
     }
 
-    public function markdown($txt) {
-        return $this->_helper->transform($txt);
+    public function markdown($text) {
+        return $this->_helper->transform($text);
     }
 
     public function getName() {
