@@ -5,13 +5,13 @@ namespace SilexMarkdown\Tests;
 use Silex\Application,
     Silex\Provider\TwigServiceProvider;
 
-use SilexMarkdown\Provider\SilexMarkdownServiceProvider;
+use SilexMarkdown\Provider\MarkdownServiceProvider;
 
 class SilexMarkdownTest extends \PHPUnit_Framework_TestCase {
 
     public function testTransform() {
         $app = new Application();
-        $app->register(new SilexMarkdownServiceProvider());
+        $app->register(new MarkdownServiceProvider());
         $text = "# Headline";
 
         $this->assertInstanceOf('\SilexMarkdown\MarkdownParser', $app['markdown']);
@@ -21,7 +21,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase {
     public function testTwigExtension() {
         $app = new Application();
         $app->register(new TwigServiceProvider());
-        $app->register(new SilexMarkdownServiceProvider());
+        $app->register(new MarkdownServiceProvider());
 
         $twig = $app['twig'];
         $ext = $twig->getExtension('markdown');
