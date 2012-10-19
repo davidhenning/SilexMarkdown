@@ -5,14 +5,14 @@ namespace SilexMarkdown\Provider;
 use Silex\Application,
     Silex\ServiceProviderInterface;
 
-use SilexMarkdown\MarkdownExtraParser,
+use SilexMarkdown\MarkdownExtraExtendedParser,
     SilexMarkdown\Twig\Extension\Markdown;
 
 class MarkdownServiceProvider implements ServiceProviderInterface {
 
     public function register(Application $app) {
         $app['markdown'] = $app->share(function () use ($app) {
-            return new MarkdownExtraParser();
+            return new MarkdownExtraExtendedParser();
         });
 
         if(isset($app['twig'])) {

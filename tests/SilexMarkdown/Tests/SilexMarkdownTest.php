@@ -18,6 +18,15 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase {
         $this->assertContains('<h1>Headline</h1>', $app['markdown']->transform($text));
     }
 
+    public function testExtraExtendedMarkdown() {
+        $app = new Application();
+        $app->register(new MarkdownServiceProvider());
+        $text = "~~~php\necho 'foo';\n~~~";
+
+        $this->assertInstanceOf('\SilexMarkdown\MarkdownParser', $app['markdown']);
+        $this->assertContains('<code class="language-php">', $app['markdown']->transform($text));
+    }
+
     public function testTwigExtension() {
         $app = new Application();
         $app->register(new TwigServiceProvider());
