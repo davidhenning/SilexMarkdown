@@ -17,7 +17,7 @@ require 'vendor/autoload.php';
 
 $app = new \Silex\Application;
 $app->register(new \Silex\Provider\TwigServiceProvider());
-$app->register(new \SilexMarkdown\Provider\SilexMarkdownServiceProvider());
+$app->register(new \SilexMarkdown\Provider\MarkdownServiceProvider());
 ~~~
 
 Render markdown with PHP:
