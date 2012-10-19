@@ -1,6 +1,6 @@
 <?php
 
-namespace SilexMarkdown;
+namespace SilexMarkdown\Parser;
 
 class MarkdownExtraParser extends MarkdownParser {
 

@@ -14,7 +14,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase {
         $app->register(new MarkdownServiceProvider());
         $text = "# Headline";
 
-        $this->assertInstanceOf('\SilexMarkdown\MarkdownParser', $app['markdown']);
+        $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
         $this->assertContains('<h1>Headline</h1>', $app['markdown']->transform($text));
     }
 
@@ -23,7 +23,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase {
         $app->register(new MarkdownServiceProvider());
         $text = "~~~php\necho 'foo';\n~~~";
 
-        $this->assertInstanceOf('\SilexMarkdown\MarkdownParser', $app['markdown']);
+        $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
         $this->assertContains('<code class="language-php">', $app['markdown']->transform($text));
     }
 

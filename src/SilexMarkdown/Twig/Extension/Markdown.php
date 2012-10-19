@@ -2,7 +2,7 @@
 
 namespace SilexMarkdown\Twig\Extension;
 
-use SilexMarkdown\MarkdownParser;
+use SilexMarkdown\Parser\MarkdownParser;
 
 use Twig_Extension;
 

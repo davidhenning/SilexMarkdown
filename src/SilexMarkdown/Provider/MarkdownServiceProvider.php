@@ -5,7 +5,7 @@ namespace SilexMarkdown\Provider;
 use Silex\Application,
     Silex\ServiceProviderInterface;
 
-use SilexMarkdown\MarkdownExtraExtendedParser,
+use SilexMarkdown\Parser\MarkdownExtraExtendedParser,
     SilexMarkdown\Twig\Extension\Markdown;
 
 class MarkdownServiceProvider implements ServiceProviderInterface {

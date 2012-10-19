@@ -1,6 +1,6 @@
 <?php
 
-namespace SilexMarkdown;
+namespace SilexMarkdown\Parser;
 
 class MarkdownExtraExtendedParser extends MarkdownExtraParser {
     # Tags that are always treated as block tags:
