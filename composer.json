@@ -15,7 +15,8 @@
     "require": {
         "php": ">=5.3.0",
         "silex/silex": "1.*",
-        "twig/twig": "1.9.*"
+        "twig/twig": "1.9.*",
+        "radiant/radiant": "*"
     },
     "require-dev": {
         "symfony/browser-kit": "2.1.*",

@@ -2,6 +2,8 @@
 
 namespace SilexMarkdown\Parser;
 
+use Radiant\Parser;
+
 class MarkdownExtraExtendedParser extends MarkdownExtraParser {
     # Tags that are always treated as block tags:
     public $block_tags_re = 'figure|figcaption|p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|address|form|fieldset|iframe|hr|legend';
@@ -92,11 +94,11 @@ class MarkdownExtraExtendedParser extends MarkdownExtraParser {
         $codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
         $codeblock = preg_replace_callback('/^\n+/',
             array(&$this, '_doFencedCodeBlocks_newlines'), $codeblock);
-        //$codeblock = "<pre><code>$codeblock</code></pre>";
-        //$cb = "<pre><code";
-        $cb = empty($matches[3]) ? "<pre><code" : "<pre class=\"linenums:$matches[3]\"><code";
+
+        $cb = empty($matches[3]) ? '<pre class="radiant"><code' : "<pre class=\"linenums:$matches[3]\"><code";
         $cb .= empty($matches[2]) ? ">" : " class=\"language-$matches[2]\">";
-        $cb .= "$codeblock</code></pre>";
+        $cb .= Parser::transform($matches[2], $codeblock)."</code></pre>";
+
         return "\n\n".$this->hashBlock($cb)."\n\n";
     }
 
