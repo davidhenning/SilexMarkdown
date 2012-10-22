@@ -4,6 +4,7 @@
     "description": "A simple markdown implementation for Silex and Twig",
     "keywords": ["silex","markdown"],
     "homepage": "https://github.com/MadCatme/SilexMarkdown",
+    "license": "MIT",
     "authors": [
         {
             "name": "David Henning",
