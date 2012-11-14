@@ -97,6 +97,12 @@ class MarkdownExtraExtendedParser extends MarkdownExtraParser {
 
         $cb = empty($matches[3]) ? '<pre class="radiant"><code' : "<pre class=\"linenums:$matches[3]\"><code";
         $cb .= empty($matches[2]) ? ">" : " class=\"language-$matches[2]\">";
+
+        if($matches[2] == 'html') {
+            $key = trim($codeblock);
+            $codeblock = $this->html_hashes[$key];
+        }
+
         $cb .= Parser::transform($matches[2], $codeblock)."</code></pre>";
 
         return "\n\n".$this->hashBlock($cb)."\n\n";
