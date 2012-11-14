@@ -7,9 +7,11 @@ use Silex\Application,
 
 use SilexMarkdown\Provider\MarkdownServiceProvider;
 
-class SilexMarkdownTest extends \PHPUnit_Framework_TestCase {
+class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
+{
 
-    public function testTransform() {
+    public function testTransform()
+    {
         $app = new Application();
         $app->register(new MarkdownServiceProvider());
         $text = "# Headline";
@@ -18,7 +20,8 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase {
         $this->assertContains('<h1>Headline</h1>', $app['markdown']->transform($text));
     }
 
-    public function testExtraExtendedMarkdown() {
+    public function testExtraExtendedMarkdown()
+    {
         $app = new Application();
         $app->register(new MarkdownServiceProvider());
         $text = "~~~php\necho 'foo';\n~~~";
@@ -27,7 +30,8 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase {
         $this->assertContains('<code class="language-php">', $app['markdown']->transform($text));
     }
 
-    public function testTwigExtension() {
+    public function testTwigExtension()
+    {
         $app = new Application();
         $app->register(new TwigServiceProvider());
         $app->register(new MarkdownServiceProvider());

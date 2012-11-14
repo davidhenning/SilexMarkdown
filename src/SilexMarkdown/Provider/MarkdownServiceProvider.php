@@ -8,14 +8,16 @@ use Silex\Application,
 use SilexMarkdown\Parser\MarkdownExtraExtendedParser,
     SilexMarkdown\Twig\Extension\Markdown;
 
-class MarkdownServiceProvider implements ServiceProviderInterface {
+class MarkdownServiceProvider implements ServiceProviderInterface
+{
 
-    public function register(Application $app) {
+    public function register(Application $app)
+    {
         $app['markdown'] = $app->share(function () use ($app) {
             return new MarkdownExtraExtendedParser();
         });
 
-        if(isset($app['twig'])) {
+        if (isset($app['twig'])) {
             $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
                 $twig->addExtension(new Markdown($app['markdown']));
 
@@ -25,7 +27,8 @@ class MarkdownServiceProvider implements ServiceProviderInterface {
     }
 
 
-    public function boot(Application $app) {
+    public function boot(Application $app)
+    {
 
     }
 }
