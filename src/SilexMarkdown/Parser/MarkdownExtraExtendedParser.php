@@ -100,7 +100,10 @@ class MarkdownExtraExtendedParser extends MarkdownExtraParser {
 
         if($matches[2] == 'html') {
             $key = trim($codeblock);
-            $codeblock = $this->html_hashes[$key];
+
+            if(isset($this->html_hashes[$key])) {
+                $codeblock = $this->html_hashes[$key];
+            }
         }
 
         $cb .= Parser::transform($matches[2], $codeblock)."</code></pre>";
