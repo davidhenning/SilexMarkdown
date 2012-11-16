@@ -29,7 +29,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
         $text = '![Alt text](http://test.org/image.jpg "Test title")';
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
-        $this->assertContains('<img src="http://test.org/image.jpg" alt="Alt text" title="Test title" />', $app['markdown']->transform($text));
+        $this->assertContains('<p><img src="http://test.org/image.jpg" alt="Alt text" title="Test title" /></p>', $app['markdown']->transform($text));
     }
 
     public function testCode()
@@ -45,8 +45,11 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     public function testRadiantFilter()
     {
         $app = new Application();
-        $app->register(new MarkdownServiceProvider());
-        $app['markdown']->registerFilter('block_code', new RadiantFilter());
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.filter' => array(
+                'block_code' => new RadiantFilter()
+            )
+        ));
         $text = "~~~php\necho 'foo';\n~~~";
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
@@ -56,12 +59,31 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     public function testEssenceFilter()
     {
         $app = new Application();
-        $app->register(new MarkdownServiceProvider());
-        $app['markdown']->registerFilter('image', new EssenceFilter());
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.filter' => array(
+                'image' => new EssenceFilter()
+            )
+        ));
         $text = "![My favorite video](http://www.youtube.com/watch?v=CmDcWr1yqCc)";
+        $result = $app['markdown']->transform($text);
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
-        $this->assertContains('src="http://www.youtube.com/embed/CmDcWr1yqCc?fs=1&feature=oembed"', $app['markdown']->transform($text));
+        $this->assertContains('<div class="embed">', $result);
+        $this->assertContains('src="http://www.youtube.com/embed/CmDcWr1yqCc?fs=1&feature=oembed"', $result);
+    }
+
+    public function testEssenceFilterWithImage()
+    {
+        $app = new Application();
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.filter' => array(
+                'image' => new EssenceFilter()
+            )
+        ));
+        $text = '![Alt text](http://test.org/image.jpg "Test title")';
+
+        $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
+        $this->assertContains('<p><img src="http://test.org/image.jpg" alt="Alt text" title="Test title" /></p>', $app['markdown']->transform($text));
     }
 
     public function testTwigExtension()

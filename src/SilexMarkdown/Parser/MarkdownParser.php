@@ -730,7 +730,7 @@ class MarkdownParser
         $title =& $matches[7];
         $result = $this->image($url, $title, $alt_text);
 
-        return $this->hashPart($result);
+        return $result;
     }
 
     public function image($link, $title, $alt_text)
@@ -739,12 +739,16 @@ class MarkdownParser
             try {
                 $result = $this->useFilter('image', $link, array($title, $alt_text));
 
-                return $result;
+                return $this->hashBlock($result);
             } catch (\InvalidArgumentException $e) {
-
+                return $this->_stdImage($link, $title, $alt_text);
             }
         }
 
+        return $this->_stdImage($link, $title, $alt_text);
+    }
+
+    protected function _stdImage($link, $title, $alt_text) {
         $alt_text = $this->encodeAttribute($alt_text);
         $link = $this->encodeAttribute($link);
         $result = "<img src=\"$link\" alt=\"$alt_text\"";
@@ -754,7 +758,7 @@ class MarkdownParser
             $result .= " title=\"$title\""; # $title already quoted
         }
 
-        return $result . $this->empty_element_suffix;
+        return $this->hashPart($result . $this->empty_element_suffix);
     }
 
     public function doHeaders($text)
