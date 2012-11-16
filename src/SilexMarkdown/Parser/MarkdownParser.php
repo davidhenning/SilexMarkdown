@@ -2,6 +2,8 @@
 
 namespace SilexMarkdown\Parser;
 
+use SilexMarkdown\Filter\FilterInterface;
+
 class MarkdownParser
 {
 
@@ -29,6 +31,8 @@ class MarkdownParser
     public $predef_urls = array();
     public $predef_titles = array();
 
+    protected $_filter = array();
+
 
     public function __construct()
     {
@@ -54,6 +58,31 @@ class MarkdownParser
         asort($this->span_gamut);
     }
 
+    public function registerFilter($method, FilterInterface $filter)
+    {
+        $this->_filter[$method][] = $filter;
+    }
+
+    public function getFilters()
+    {
+        return $this->_filter;
+    }
+
+    public function hasFilter($method)
+    {
+        return isset($this->_filter[$method]) && !empty($this->_filter[$method]);
+    }
+
+    public function useFilter($method, $content, $params)
+    {
+        foreach($this->_filter[$method] as $filter) {
+            $name = $filter->getName();
+            $params = array_merge(array($content), $params);
+            $content = call_user_func_array(array($filter, $name), $params);
+        }
+
+        return $content;
+    }
 
     # Internal hashes used during transformation.
     public $urls = array();
@@ -696,23 +725,37 @@ class MarkdownParser
 
     public function _doImages_inline_callback($matches)
     {
-        $whole_match = $matches[1];
         $alt_text = $matches[2];
         $url = $matches[3] == '' ? $matches[4] : $matches[3];
         $title =& $matches[7];
-
-        $alt_text = $this->encodeAttribute($alt_text);
-        $url = $this->encodeAttribute($url);
-        $result = "<img src=\"$url\" alt=\"$alt_text\"";
-        if (isset($title)) {
-            $title = $this->encodeAttribute($title);
-            $result .= " title=\"$title\""; # $title already quoted
-        }
-        $result .= $this->empty_element_suffix;
+        $result = $this->image($url, $title, $alt_text);
 
         return $this->hashPart($result);
     }
 
+    public function image($link, $title, $alt_text)
+    {
+        if ($this->hasFilter('image')) {
+            try {
+                $result = $this->useFilter('image', $link, array($title, $alt_text));
+
+                return $result;
+            } catch (\InvalidArgumentException $e) {
+
+            }
+        }
+
+        $alt_text = $this->encodeAttribute($alt_text);
+        $link = $this->encodeAttribute($link);
+        $result = "<img src=\"$link\" alt=\"$alt_text\"";
+
+        if (isset($title)) {
+            $title = $this->encodeAttribute($title);
+            $result .= " title=\"$title\""; # $title already quoted
+        }
+
+        return $result . $this->empty_element_suffix;
+    }
 
     public function doHeaders($text)
     {

@@ -5,7 +5,9 @@ namespace SilexMarkdown\Tests;
 use Silex\Application,
     Silex\Provider\TwigServiceProvider;
 
-use SilexMarkdown\Provider\MarkdownServiceProvider;
+use SilexMarkdown\Filter\RadiantFilter,
+    SilexMarkdown\Filter\EssenceFilter,
+    SilexMarkdown\Provider\MarkdownServiceProvider;
 
 class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,7 +22,17 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<h1>Headline</h1>', $app['markdown']->transform($text));
     }
 
-    public function testExtraExtendedMarkdown()
+    public function testImage()
+    {
+        $app = new Application();
+        $app->register(new MarkdownServiceProvider());
+        $text = '![Alt text](http://test.org/image.jpg "Test title")';
+
+        $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
+        $this->assertContains('<img src="http://test.org/image.jpg" alt="Alt text" title="Test title" />', $app['markdown']->transform($text));
+    }
+
+    public function testCode()
     {
         $app = new Application();
         $app->register(new MarkdownServiceProvider());
@@ -28,6 +40,28 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
         $this->assertContains('<code class="language-php">', $app['markdown']->transform($text));
+    }
+
+    public function testRadiantFilter()
+    {
+        $app = new Application();
+        $app->register(new MarkdownServiceProvider());
+        $app['markdown']->registerFilter('block_code', new RadiantFilter());
+        $text = "~~~php\necho 'foo';\n~~~";
+
+        $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
+        $this->assertContains('<span class="radiant_keyword">', $app['markdown']->transform($text));
+    }
+
+    public function testEssenceFilter()
+    {
+        $app = new Application();
+        $app->register(new MarkdownServiceProvider());
+        $app['markdown']->registerFilter('image', new EssenceFilter());
+        $text = "![My favorite video](http://www.youtube.com/watch?v=CmDcWr1yqCc)";
+
+        $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
+        $this->assertContains('src="http://www.youtube.com/embed/CmDcWr1yqCc?fs=1&feature=oembed"', $app['markdown']->transform($text));
     }
 
     public function testTwigExtension()

@@ -114,9 +114,18 @@ class MarkdownExtraExtendedParser extends MarkdownExtraParser
             }
         }
 
-        $cb .= Parser::transform($matches[2], $codeblock) . "</code></pre>";
+        $cb .=  $this->block_code($codeblock, $matches[2]). "</code></pre>";
 
         return "\n\n" . $this->hashBlock($cb) . "\n\n";
+    }
+
+    public function block_code($code, $language)
+    {
+        if ($this->hasFilter('block_code')) {
+            return $this->useFilter('block_code', $code, array($language));
+        }
+
+        return $code;
     }
 
     public function doFencedFigures($text)
