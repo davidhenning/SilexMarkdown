@@ -14,7 +14,15 @@ class MarkdownServiceProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $app['markdown'] = $app->share(function () use ($app) {
-            return new MarkdownExtraExtendedParser();
+            $parser = new MarkdownExtraExtendedParser();
+
+            if (isset($app['markdown.filter'])) {
+                foreach($app['markdown.filter'] as $method => $filter) {
+                    $parser->registerFilter($method, $filter);
+                }
+            }
+
+            return $parser;
         });
 
         if (isset($app['twig'])) {
