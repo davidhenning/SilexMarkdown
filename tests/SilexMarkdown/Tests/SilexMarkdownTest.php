@@ -36,7 +36,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->register(new MarkdownServiceProvider());
-        $text = "~~~php\necho 'foo';\n~~~";
+        $text = "~~~php\n" . '$posts = new PostCollection($app);' ."\n~~~";
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
         $this->assertContains('<code class="language-php">', $app['markdown']->transform($text));
@@ -50,8 +50,8 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
                 'block_code' => new RadiantFilter()
             )
         ));
-        $text = "~~~php\necho 'foo';\n~~~";
-
+        $text = "~~~php\n" . 'echo $posts-&gt;find()->head()->title;' ."\n~~~";
+        echo $app['markdown']->transform($text);
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
         $this->assertContains('<span class="radiant_keyword">', $app['markdown']->transform($text));
     }
