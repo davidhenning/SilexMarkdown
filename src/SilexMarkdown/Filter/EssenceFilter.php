@@ -15,7 +15,7 @@ class EssenceFilter implements FilterInterface
             throw new \InvalidArgumentException("URL '{$link} could not be embedded!'");
         }
 
-        return $media->html;
+        return "<div class=\"embed\">{$media->html}</div>";
     }
 
     public function getName()
