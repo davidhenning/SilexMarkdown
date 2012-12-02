@@ -8,37 +8,19 @@ class PygmentsFilter implements FilterInterface
 {
     public function transform($code, $language)
     {
-        $code = $this->_prepareCode($code, $language);
         $browser = new Browser();
         $response = $browser->submit(
-            'http://pygments.appspot.com/',
+            'http://pygmentizr.herokuapp.com',
             array(
-                'lang' => $language,
-                'code' => $code
+                'language' => $language,
+                'code' => $code,
+                'nowrap' => 1
             )
         );
 
         $content = $response->getContent();
 
-        return '<div class="pygments">' . $this->_cleanUp($content) . '</div>';
-    }
-
-    protected function _prepareCode($code, $language)
-    {
-        if($language === 'php') {
-            if(strpos($code, '<?php') === false) {
-                $code = "<?php\n\n" . $code;
-            }
-        }
-
-        return $code;
-    }
-
-    protected function _cleanUp($content)
-    {
-        preg_match('/<pre>(.*)<\/pre>/s', $content, $matches);
-
-        return $matches[1];
+        return "<div class=\"pygments\">{$content}</div>";
     }
 
     public function getName()
