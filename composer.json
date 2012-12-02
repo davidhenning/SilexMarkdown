@@ -18,7 +18,8 @@
         "silex/silex": "1.*",
         "twig/twig": "1.9.*",
         "radiant/radiant": "*",
-        "fg/essence": "*"
+        "fg/essence": "*",
+        "kriswallsmith/buzz": "*"
     },
     "require-dev": {
         "symfony/browser-kit": "2.1.*",

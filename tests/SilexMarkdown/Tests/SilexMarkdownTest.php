@@ -7,6 +7,7 @@ use Silex\Application,
 
 use SilexMarkdown\Filter\RadiantFilter,
     SilexMarkdown\Filter\EssenceFilter,
+    SilexMarkdown\Filter\PygmentsFilter,
     SilexMarkdown\Provider\MarkdownServiceProvider;
 
 class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
@@ -54,6 +55,20 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
         echo $app['markdown']->transform($text);
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
         $this->assertContains('<span class="radiant_keyword">', $app['markdown']->transform($text));
+    }
+
+    public function testPygmentsFilter()
+    {
+        $app = new Application();
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.filter' => array(
+                'block_code' => new PygmentsFilter()
+            )
+        ));
+        $text = "~~~php\n" . 'echo $posts->find()->head()->title;' ."\n~~~";
+        echo $app['markdown']->transform($text);
+        $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
+        $this->assertContains('<div class="highlight">', $app['markdown']->transform($text));
     }
 
     public function testEssenceFilter()
