@@ -26,7 +26,7 @@ class PygmentsFilter implements FilterInterface
     protected function _prepareCode($code, $language)
     {
         if($language === 'php') {
-            if(strpos('<?php', $code) === false) {
+            if(strpos($code, '<?php') === false) {
                 $code = "<?php\n\n" . $code;
             }
         }
