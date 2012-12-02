@@ -65,7 +65,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
                 'block_code' => new PygmentsFilter()
             )
         ));
-        $text = "~~~php\n" . 'echo $posts->find()->head()->title;' ."\n~~~";
+        $text = "~~~php\n" . '<?php echo $posts->find()->head()->title;' ."\n~~~";
         echo $app['markdown']->transform($text);
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
         $this->assertContains('<div class="highlight">', $app['markdown']->transform($text));
