@@ -8,6 +8,7 @@ class PygmentsFilter implements FilterInterface
 {
     public function transform($code, $language)
     {
+        $code = $this->_prepareCode($code, $language);
         $browser = new Browser();
         $response = $browser->submit(
             'http://pygments.appspot.com/',
@@ -17,7 +18,27 @@ class PygmentsFilter implements FilterInterface
             )
         );
 
-        return $response->getContent();
+        $content = $response->getContent();
+
+        return '<div class="pygments">' . $this->_cleanUp($content) . '</div>';
+    }
+
+    protected function _prepareCode($code, $language)
+    {
+        if($language === 'php') {
+            if(strpos('<?php', $code) === false) {
+                $code = "<?php\n\n" . $code;
+            }
+        }
+
+        return $code;
+    }
+
+    protected function _cleanUp($content)
+    {
+        preg_match('/<pre>(.*)<\/pre>/s', $content, $matches);
+
+        return $matches[1];
     }
 
     public function getName()
