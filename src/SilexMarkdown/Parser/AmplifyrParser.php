@@ -6,7 +6,7 @@ use SilexMarkdown\Filter\FilterInterface;
 
 use Buzz\Browser;
 
-class AmplifyrParser
+class AmplifyrParser implements ParserInterface
 {
     public function transform($source)
     {

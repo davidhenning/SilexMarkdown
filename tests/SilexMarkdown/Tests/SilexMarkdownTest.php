@@ -21,6 +21,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
         $app->register(new MarkdownServiceProvider(), array(
             'markdown.parser' => new MarkdownExtraExtendedParser()
         ));
+        $app->register(new TwigServiceProvider());
         $text = "# Headline";
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
@@ -38,6 +39,18 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testAmplifyr()
+    {
+        $app = new Application();
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new AmplifyrParser()
+        ));
+        $text = "# Headline";
+
+        $this->assertInstanceOf('\SilexMarkdown\Parser\AmplifyrParser', $app['markdown']);
+        $this->assertContains('<h1>Headline</h1>', $app['markdown']->transform($text));
+    }
+
+    public function testAmplifyrWithTwigExtension()
     {
         $app = new Application();
         $app->register(new MarkdownServiceProvider(), array(

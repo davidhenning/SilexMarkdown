@@ -4,7 +4,7 @@ namespace SilexMarkdown\Parser;
 
 use SilexMarkdown\Filter\FilterInterface;
 
-class MarkdownParser
+class MarkdownParser implements ParserInterface
 {
 
     # Regex to match balanced [brackets].
@@ -119,7 +119,7 @@ class MarkdownParser
     }
 
 
-    public function transform($text)
+    public function transform($source)
     {
         #
         # Main function. Performs some preprocessing on the input text
@@ -128,35 +128,35 @@ class MarkdownParser
         $this->setup();
 
         # Remove UTF-8 BOM and marker character in input, if present.
-        $text = preg_replace('{^\xEF\xBB\xBF|\x1A}', '', $text);
+        $source = preg_replace('{^\xEF\xBB\xBF|\x1A}', '', $source);
 
         # Standardize line endings:
         #   DOS to Unix and Mac to Unix
-        $text = preg_replace('{\r\n?}', "\n", $text);
+        $source = preg_replace('{\r\n?}', "\n", $source);
 
         # Make sure $text ends with a couple of newlines:
-        $text .= "\n\n";
+        $source .= "\n\n";
 
         # Convert all tabs to spaces.
-        $text = $this->detab($text);
+        $source = $this->detab($source);
 
         # Turn block-level HTML blocks into hash entries
-        $text = $this->hashHTMLBlocks($text);
+        $source = $this->hashHTMLBlocks($source);
 
         # Strip any lines consisting only of spaces and tabs.
         # This makes subsequent regexen easier to write, because we can
         # match consecutive blank lines with /\n+/ instead of something
         # contorted like /[ ]*\n+/ .
-        $text = preg_replace('/^[ ]+$/m', '', $text);
+        $source = preg_replace('/^[ ]+$/m', '', $source);
 
         # Run document gamut methods.
         foreach ($this->document_gamut as $method => $priority) {
-            $text = $this->$method($text);
+            $source = $this->$method($source);
         }
 
         $this->teardown();
 
-        return $text . "\n";
+        return $source . "\n";
     }
 
     public $document_gamut = array(

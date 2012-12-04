@@ -2,8 +2,6 @@
 
 namespace SilexMarkdown\Parser;
 
-use Radiant\Parser;
-
 class MarkdownExtraExtendedParser extends MarkdownExtraParser
 {
     # Tags that are always treated as block tags:
@@ -18,10 +16,10 @@ class MarkdownExtraExtendedParser extends MarkdownExtraParser
         parent::__construct();
     }
 
-    public function transform($text)
+    public function transform($source)
     {
-        $text = parent::transform($text);
-        return $text;
+        $source = parent::transform($source);
+        return $source;
     }
 
     public function doHardBreaks($text)

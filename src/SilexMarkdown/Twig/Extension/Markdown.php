@@ -2,7 +2,7 @@
 
 namespace SilexMarkdown\Twig\Extension;
 
-use SilexMarkdown\Parser\MarkdownParser;
+use SilexMarkdown\Parser\ParserInterface;
 
 use Twig_Extension;
 
@@ -10,7 +10,7 @@ class Markdown extends Twig_Extension
 {
     protected $_helper;
 
-    public function __construct(MarkdownParser $helper)
+    public function __construct(ParserInterface $helper)
     {
         $this->_helper = $helper;
     }
