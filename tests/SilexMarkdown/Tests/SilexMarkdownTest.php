@@ -5,7 +5,9 @@ namespace SilexMarkdown\Tests;
 use Silex\Application,
     Silex\Provider\TwigServiceProvider;
 
-use SilexMarkdown\Filter\RadiantFilter,
+use SilexMarkdown\Parser\AmplifyrParser,
+    SilexMarkdown\Parser\MarkdownExtraExtendedParser,
+    SilexMarkdown\Filter\RadiantFilter,
     SilexMarkdown\Filter\EssenceFilter,
     SilexMarkdown\Filter\PygmentsFilter,
     SilexMarkdown\Provider\MarkdownServiceProvider;
@@ -16,6 +18,18 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     public function testTransform()
     {
         $app = new Application();
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new MarkdownExtraExtendedParser()
+        ));
+        $text = "# Headline";
+
+        $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
+        $this->assertContains('<h1>Headline</h1>', $app['markdown']->transform($text));
+    }
+
+    public function testTransformWithoutParserInjection()
+    {
+        $app = new Application();
         $app->register(new MarkdownServiceProvider());
         $text = "# Headline";
 
@@ -23,10 +37,24 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('<h1>Headline</h1>', $app['markdown']->transform($text));
     }
 
+    public function testAmplifyr()
+    {
+        $app = new Application();
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new AmplifyrParser()
+        ));
+        $text = "# Headline";
+
+        $this->assertInstanceOf('\SilexMarkdown\Parser\AmplifyrParser', $app['markdown']);
+        $this->assertContains('<h1>Headline</h1>', $app['markdown']->transform($text));
+    }
+
     public function testImage()
     {
         $app = new Application();
-        $app->register(new MarkdownServiceProvider());
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new MarkdownExtraExtendedParser()
+        ));
         $text = '![Alt text](http://test.org/image.jpg "Test title")';
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
@@ -36,7 +64,9 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     public function testCode()
     {
         $app = new Application();
-        $app->register(new MarkdownServiceProvider());
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new MarkdownExtraExtendedParser()
+        ));
         $text = "~~~php\n" . '$posts = new PostCollection($app);' ."\n~~~";
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
@@ -47,6 +77,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new MarkdownExtraExtendedParser(),
             'markdown.filter' => array(
                 'block_code' => new RadiantFilter()
             )
@@ -61,6 +92,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new MarkdownExtraExtendedParser(),
             'markdown.filter' => array(
                 'block_code' => new PygmentsFilter()
             )
@@ -75,6 +107,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new MarkdownExtraExtendedParser(),
             'markdown.filter' => array(
                 'image' => new EssenceFilter()
             )
@@ -91,6 +124,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new MarkdownExtraExtendedParser(),
             'markdown.filter' => array(
                 'image' => new EssenceFilter()
             )
@@ -105,7 +139,9 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
     {
         $app = new Application();
         $app->register(new TwigServiceProvider());
-        $app->register(new MarkdownServiceProvider());
+        $app->register(new MarkdownServiceProvider(), array(
+            'markdown.parser' => new MarkdownExtraExtendedParser()
+        ));
 
         $twig = $app['twig'];
         $ext = $twig->getExtension('markdown');

@@ -14,7 +14,7 @@ class MarkdownServiceProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $app['markdown'] = $app->share(function () use ($app) {
-            $parser = new MarkdownExtraExtendedParser();
+            $parser = (isset($app['markdown.parser'])) ? $app['markdown.parser'] : new MarkdownExtraExtendedParser();
 
             if (isset($app['markdown.filter'])) {
                 foreach($app['markdown.filter'] as $method => $filter) {
