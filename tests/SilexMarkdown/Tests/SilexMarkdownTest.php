@@ -130,7 +130,7 @@ class SilexMarkdownTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\SilexMarkdown\Parser\MarkdownParser', $app['markdown']);
         $this->assertContains('<div class="embed">', $result);
-        $this->assertContains('src="http://www.youtube.com/embed/CmDcWr1yqCc?fs=1&feature=oembed"', $result);
+        $this->assertContains('src="http://www.youtube.com/embed/CmDcWr1yqCc?feature=oembed"', $result);
     }
 
     public function testEssenceFilterWithImage()
