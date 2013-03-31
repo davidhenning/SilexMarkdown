@@ -32,3 +32,4 @@ config.ini
 cache.properties
 composer.phar
 composer.lock
+phpunit.phar
