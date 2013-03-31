@@ -18,7 +18,7 @@ class Markdown extends Twig_Extension
     public function getFilters()
     {
         return array(
-            'markdown' => new \Twig_Filter_Method($this, 'markdown', array('is_safe' => array('html'))),
+            'sm.markdown' => new \Twig_Filter_Method($this, 'sm.markdown', array('is_safe' => array('html'))),
         );
     }
 
@@ -29,6 +29,6 @@ class Markdown extends Twig_Extension
 
     public function getName()
     {
-        return 'markdown';
+        return 'sm.markdown';
     }
 }

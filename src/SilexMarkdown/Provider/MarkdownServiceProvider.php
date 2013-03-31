@@ -13,11 +13,11 @@ class MarkdownServiceProvider implements ServiceProviderInterface
 
     public function register(Application $app)
     {
-        $app['markdown'] = $app->share(function () use ($app) {
-            $parser = (isset($app['markdown.parser'])) ? $app['markdown.parser'] : new MarkdownExtraExtendedParser();
+        $app['sm.markdown'] = $app->share(function () use ($app) {
+            $parser = (isset($app['sm.markdown.parser'])) ? $app['sm.markdown.parser'] : new MarkdownExtraExtendedParser();
 
-            if (isset($app['markdown.filter'])) {
-                foreach($app['markdown.filter'] as $method => $filter) {
+            if (isset($app['sm.markdown.filter'])) {
+                foreach($app['sm.markdown.filter'] as $method => $filter) {
                     $parser->registerFilter($method, $filter);
                 }
             }
@@ -27,7 +27,7 @@ class MarkdownServiceProvider implements ServiceProviderInterface
 
         if (isset($app['twig'])) {
             $app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
-                $twig->addExtension(new Markdown($app['markdown']));
+                $twig->addExtension(new Markdown($app['sm.markdown']));
 
                 return $twig;
             }));
